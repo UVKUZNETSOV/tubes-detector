@@ -1,10 +1,19 @@
-canny:            120
-accumulator:       35
-minRadius:         10
-maxRadius:         55
-blur:               5
-clahe_clip:        2.0
-minArea:          150
-maxArea:        12000
-circularity:       0.7
-duplicateThresh:   12
+useGrid:  true
+rows:     2
+cols:     14
+bandH:    70
+peakTol:  60      
+
+blur:     5
+canny:    100
+
+accOuter: 20
+minROuter: 60
+maxROuter: 130
+
+accInner: 15
+minRInner: 15
+maxRInner: 50
+
+minDist:  100
+mergeTol: 50

@@ -41,21 +41,31 @@ int main(int argc, char **argv)
   CmdOpt opt = parse(argc, argv);
 
   TubeParams tp;
+  // --- чтение YAML-конфига ---
   if (!opt.config.empty())
   {
     try
     {
       cv::FileStorage fs(opt.config.string(), cv::FileStorage::READ);
-      if (!fs.isOpened())
+      if (fs.isOpened())
       {
-        std::cerr << "[WARN] Cannot open config file '" << opt.config << "', using defaults\n";
+        fs["blur"] >> tp.blur;
+        fs["canny"] >> tp.canny;
+
+        fs["accOuter"] >> tp.accOuter;
+        fs["minROuter"] >> tp.minROuter;
+        fs["maxROuter"] >> tp.maxROuter;
+
+        fs["accInner"] >> tp.accInner;
+        fs["minRInner"] >> tp.minRInner;
+        fs["maxRInner"] >> tp.maxRInner;
+
+        fs["minDist"] >> tp.minDist;
+        fs["mergeTol"] >> tp.mergeTol;
       }
       else
       {
-        fs["canny"] >> tp.canny;
-        fs["accumulator"] >> tp.accumulator;
-        fs["minRadius"] >> tp.minRadius;
-        fs["maxRadius"] >> tp.maxRadius;
+        std::cerr << "[WARN] Cannot open config file, using defaults\n";
       }
     }
     catch (const cv::Exception &e)
@@ -63,6 +73,7 @@ int main(int argc, char **argv)
       std::cerr << "[WARN] Config ignored: " << e.what() << '\n';
     }
   }
+
   TubeDetector detector(tp);
   fs::create_directories(opt.output);
 
